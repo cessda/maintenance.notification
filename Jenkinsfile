@@ -20,7 +20,7 @@ pipeline{
 
 	environment {
 		productName = 'maintanence'
-		imageTag = "${docker_repo}/${productName}:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+		imageTag = "${DOCKER_ARTIFACT_REGISTRY}/${productName}:${GIT_COMMIT}"
 		PATH = "${tool 'helm'}:${PATH}"
 	}
 
@@ -51,7 +51,7 @@ pipeline{
 		stage('Deploy Maintanence Notice') {
 			steps {
 				sh "helm upgrade maintanence ./chart --namespace cessda-mgmt --create-namespace --install" + 
-					" --set image.tag=${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+					" --set image.tag=${GIT_COMMIT}"
 			}
 			when { branch 'main' }
 		}
